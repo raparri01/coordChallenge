@@ -35,7 +35,7 @@ export class CountdownService {
       timeBetweenCommits.reduce((total, item) => total + item, 0) /
         timeBetweenCommits.length
     );
-    this.averageCommitTime = timeBetweenCommits.reduce((total, item) => total + item, 0) / timeBetweenCommits.length;
+    this.averageCommitTime = (timeBetweenCommits.reduce((total, item) => total + item, 0) / timeBetweenCommits.length) * 1000;
   }
   getTimeToNCommit(length, n, average){
     let remainingCommits = n - length - 1;
@@ -48,17 +48,20 @@ export class CountdownService {
     return Date.now() + time;
   }
   addCommit(){
+    let commitTime = Date.now()
+    this.averageCommitTime = (((this.averageCommitTime * this.commitCount) + (commitTime - this.lastCommitTime)) / (this.commitCount + 1));  
     this.commitCount++;
-    this.lastCommitTime = Date.now();
+    this.lastCommitTime = commitTime;
   }
   getCountdownDisplay(){
-    let remainingHours = Math.floor((this.timeUntilNCommit / 3600000)).toFixed();
+    let remainingDays = Math.floor((this.timeUntilNCommit / 86400000));
+    let remainingHours = Math.floor((this.timeUntilNCommit / 3600000) % 24).toFixed();
     let remainingMinutes = Math.floor(((this.timeUntilNCommit / 60000) % 60)).toFixed();
     let remainingSeconds = Math.floor(((this.timeUntilNCommit / 1000) % 60)).toFixed();
     if(parseInt(remainingSeconds) < 0){
       return ('00:00:00');
     } else {
-      return(`${remainingHours.padStart(2,'0')}:${remainingMinutes.padStart(2,'0')}:${remainingSeconds.padStart(2,'0')}`);
+      return(`${remainingDays} Days, ${remainingHours} Hours, ${remainingMinutes} Minutes, ${remainingSeconds} Seconds`);
     }
   }
 }
