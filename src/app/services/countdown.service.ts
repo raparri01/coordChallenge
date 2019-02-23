@@ -17,7 +17,7 @@ export class CountdownService {
     return this.http.get("https://api.staging.coord.co/codechallenge/commits");
   }
   processCommitData(data) {
-    this.lastCommitTime = data[0];
+    this.lastCommitTime = data[0] * 1000;
     this.commitCount = data.length;
     //Method 1
     console.log(
