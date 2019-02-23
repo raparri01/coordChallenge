@@ -2,7 +2,7 @@
 
 **Getting Started**
 
-The following libraries must be installed on the development device in order to run this application.
+The following node libraries must be installed globally on the development device in order to run this application.
 
 - Ionic@latest
 - Angular@latest
