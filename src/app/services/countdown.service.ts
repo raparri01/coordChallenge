@@ -10,14 +10,15 @@ export class CountdownService {
   commitCount: number = 0;
   lastCommitTime: number = 0;
   timeUntilNCommit: number = 0;
+  countdownDisplay: number = 0;
   constructor(private http: HttpClient) {}
 
   getCommitData() {
     return this.http.get("https://api.staging.coord.co/codechallenge/commits");
   }
   processCommitData(data) {
+    this.lastCommitTime = data[0];
     this.commitCount = data.length;
-    this.lastCommitTime = data[data.length- 1];
     //Method 1
     console.log(
       "Method 1 Average Commit Time: ",
@@ -37,19 +38,27 @@ export class CountdownService {
     this.averageCommitTime = timeBetweenCommits.reduce((total, item) => total + item, 0) / timeBetweenCommits.length;
   }
   getTimeToNCommit(length, n, average){
-    let remainingCommits = n - length;
+    let remainingCommits = n - length - 1;
     let remainingTime = remainingCommits * average;
+    this.timeUntilNCommit = remainingTime;
 
-    return(remainingTime);
+    return this.timeUntilNCommit;
   }
   getCommitDate(time){
     return Date.now() + time;
   }
   addCommit(){
-    let commitTime = Date.now();
-    this.lastCommitTime = commitTime;
-    let newCommitTime = commitTime - this.lastCommitTime;
-    this.averageCommitTime = ((this.averageCommitTime * this.commitCount) + newCommitTime) / this.commitCount + 1;
     this.commitCount++;
+    this.lastCommitTime = Date.now();
+  }
+  getCountdownDisplay(){
+    let remainingHours = Math.floor((this.timeUntilNCommit / 3600000)).toFixed();
+    let remainingMinutes = Math.floor(((this.timeUntilNCommit / 60000) % 60)).toFixed();
+    let remainingSeconds = Math.floor(((this.timeUntilNCommit / 1000) % 60)).toFixed();
+    if(parseInt(remainingSeconds) < 0){
+      return ('00:00:00');
+    } else {
+      return(`${remainingHours.padStart(2,'0')}:${remainingMinutes.padStart(2,'0')}:${remainingSeconds.padStart(2,'0')}`);
+    }
   }
 }

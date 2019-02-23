@@ -10,20 +10,24 @@
       Information
     </ion-list-header>
     <ion-item>
-      <ion-label text-wrap>Current Commit</ion-label>
-      <ion-label text-right>{{currentCommit}}</ion-label>
+      <ion-label text-wrap>Current Commits</ion-label>
+      <ion-label text-right>{{ currentCommit }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label text-wrap>Last Commit</ion-label>
+      <ion-label text-right text-wrap>{{
+        lastCommit | date: "medium"
+      }}</ion-label>
     </ion-item>
     <ion-item>
       <ion-label text-wrap>2000th Commit Prediction</ion-label>
-      <ion-label text-right text-wrap>{{nCommitDate | date:'medium'}}</ion-label>
+      <ion-label text-right text-wrap>{{
+        nCommitDate | date: "medium"
+      }}</ion-label>
     </ion-item>
     <ion-item>
       <ion-label text-wrap>Time Until 2000th Commit</ion-label>
-      <ion-label text-right>{{timeUntilNCommit | date:'hh:mm:ss'}}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label text-wrap>Average Time Per Commit</ion-label>
-      <ion-label text-right>{{averageCommitTime | date:'mm:ss'}}</ion-label>
+      <ion-label text-right>{{ displayTime }}</ion-label>
     </ion-item>
   </ion-list>
   <ion-button expand="block" (click)="makeCommit()">Make Commit</ion-button>
